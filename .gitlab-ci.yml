@@ -1,0 +1,64 @@
+image: golang
+
+variables:
+  RELEASE_BIN: "/binaries/release"
+  RELEASE_VERSION: "v0.21.1"
+
+stages:
+  - version
+  - build
+  - release
+
+cache:
+  paths:
+    - /binaries/
+
+before_script:
+  - apt-get update && apt-get install -y make
+  - mkdir -p /go/src/gitlab.com/_p0l0_
+  - ln -s /builds/cloudflare-dyndns /go/src/gitlab.com/_p0l0_/cloudflare-dyndns
+  - cd /go/src/gitlab.com/_p0l0_/cloudflare-dyndns
+  - if [! -d "/binaries/" ]; then mkdir /binaries/; fi
+  - if [! -f "${RELEASE_BIN}" ]; then curl -o ${RELEASE_BIN} https://juhani.gitlab.io/go-semrel-gitlab/download/${RELEASE_VERSION}/release; chmod +x $RELEASE_BIN; fi
+
+version:
+  stage: version
+  image: registry.gitlab.com/juhani/go-semrel-gitlab:${${RELEASE_VERSION}
+  script:
+    - $RELEASE_BIN next-version --allow-current > .next-version
+  artifacts:
+    paths:
+      - .next-version
+  except:
+    - tags
+
+test:
+  stage: build
+  script:
+    - make test
+  except:
+    - tags
+
+compile:
+  stage: build
+  script:
+    - make
+    - cp build/cloudflare-dyndns-1.1.0-linux_amd64 cloudflare-dyndns
+    - echo "RELEASE_URL=https://gitlab.com/api/v4/projects/$CI_PROJECT_ID/jobs/$CI_JOB_ID/artifacts/cloudflare-dyndns" > build_info
+    - echo "RELEASE_DESC=\"Linux AMD64 binary\"" >> build_info
+  artifacts:
+    paths:
+      - build_info
+      - build
+      - cloudflare-dyndns
+  except:
+    - tags
+
+
+release:
+  stage: release
+  script:
+    - . build_info
+    - $RELEASE_BIN changelog
+    - $RELEASE_BIN commit-and-tag CHANGELOG.md release_info
+    - $RELEASE_BIN --ci-commit-tag v$(<.next-version) add-download-link -n cloudflare-dyndns -u $RELEASE_URL -d "$RELEASE_DESC"

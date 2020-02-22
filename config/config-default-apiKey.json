@@ -1,0 +1,10 @@
+{
+  "cloudflare": {
+    "apiKey": "key",
+    "email": "my@email.com"
+  },
+  "dnsZone": {
+    "name": "domain.com",
+    "record": "subdomain"
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "cloudflare": {
+    "apiToken": "token"
+  },
+  "dnsZone": {
+    "name": "domain.com",
+    "record": "subdomain"
+  }
+}
