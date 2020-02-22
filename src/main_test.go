@@ -78,8 +78,16 @@ func TestGetCurrentDNSIP(t *testing.T) {
 
 	require.NoError(t, err)
 	assert.IsType(t, IP{}, ip)
-	assert.Equal(t, "127.0.0.1", ip.String)
-	assert.Equal(t, 4, ip.Format)
+	if ip.Format == 4 {
+		assert.Equal(t, "127.0.0.1", ip.String)
+		assert.Equal(t, 4, ip.Format)
+	} else if ip.Format == 6 {
+		assert.Equal(t, "::1", ip.String)
+		assert.Equal(t, 6, ip.Format)
+	} else {
+		assert.Failf(t, "Invalid IP Format found", "IP found like: %v", ip)
+	}
+
 
 	_, err = getCurrentDNSIP("not.valid.dns")
 	require.Error(t, err)
