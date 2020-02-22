@@ -23,7 +23,7 @@ before_script:
 
 version:
   stage: version
-  image: registry.gitlab.com/juhani/go-semrel-gitlab:${${RELEASE_VERSION}
+  image: registry.gitlab.com/juhani/go-semrel-gitlab:v0.20.4
   script:
     - $RELEASE_BIN next-version --allow-current > .next-version
   artifacts:
