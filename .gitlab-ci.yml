@@ -1,7 +1,7 @@
 image: golang
 
 variables:
-  RELEASE_BIN: "/binaries/release"
+  RELEASE_BIN: "binaries/release"
   RELEASE_VERSION: "v0.21.1"
 
 stages:
@@ -11,14 +11,14 @@ stages:
 
 cache:
   paths:
-    - /binaries/
+    - binaries/
 
 before_script:
   - apt-get update && apt-get install -y make curl
   - mkdir -p /go/src/gitlab.com/_p0l0_
   - ln -s /builds/_p0l0_/cloudflare-dyndns /go/src/gitlab.com/_p0l0_/cloudflare-dyndns
   - cd /go/src/gitlab.com/_p0l0_/cloudflare-dyndns
-  - if [ ! -d "/binaries/" ]; then mkdir /binaries/; fi
+  - if [ ! -d "binaries/" ]; then mkdir binaries/; fi
   - if [ ! -f "${RELEASE_BIN}" ]; then curl -o ${RELEASE_BIN} https://juhani.gitlab.io/go-semrel-gitlab/download/${RELEASE_VERSION}/release; chmod +x $RELEASE_BIN; fi
 
 version:

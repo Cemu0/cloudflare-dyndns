@@ -96,9 +96,9 @@ func getCurrentDNSIP(dns string) (IP, error) {
 // Returns the DNS Recordtype for the given IP
 func getDNSRecordType(externalIP IP) (string, error) {
 	switch externalIP.Format {
-	case 4:
+	case net.IPv4len:
 		return "A", nil
-	case 6:
+	case net.IPv6len:
 		return "AAAA", nil
 	default:
 		return "", errors.New("Unknown IP Format " + string(externalIP.Format))

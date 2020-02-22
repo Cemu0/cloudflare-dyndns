@@ -78,12 +78,12 @@ func TestGetCurrentDNSIP(t *testing.T) {
 
 	require.NoError(t, err)
 	assert.IsType(t, IP{}, ip)
-	if ip.Format == 4 {
+	if ip.Format == net.IPv4len {
 		assert.Equal(t, "127.0.0.1", ip.String)
-		assert.Equal(t, 4, ip.Format)
-	} else if ip.Format == 6 {
+		assert.Equal(t, net.IPv4len, ip.Format)
+	} else if ip.Format == net.IPv6len {
 		assert.Equal(t, "::1", ip.String)
-		assert.Equal(t, 6, ip.Format)
+		assert.Equal(t, net.IPv6len, ip.Format)
 	} else {
 		assert.Failf(t, "Invalid IP Format found", "IP found like: %v", ip)
 	}
@@ -106,11 +106,11 @@ func TestInitializeLog(t *testing.T) {
 }
 
 func TestGetDNSRecordType(t *testing.T) {
-	ipv4, err := getDNSRecordType(IP{Format: 4})
+	ipv4, err := getDNSRecordType(IP{Format: net.IPv4len})
 	require.NoError(t, err)
 	assert.Equal(t, "A", ipv4)
 
-	ipv6, err := getDNSRecordType(IP{Format: 6})
+	ipv6, err := getDNSRecordType(IP{Format: net.IPv6len})
 	require.NoError(t, err)
 	assert.Equal(t, "AAAA", ipv6)
 
@@ -326,7 +326,7 @@ func TestCloudflareCreateDNSSuccess(t *testing.T) {
 
 	_, err = cloudflareCreateDNS(client, "example.com", IP{
 		String: "127.0.0.1",
-		Format: 4,
+		Format: net.IPv4len,
 	}, "023e105f4ecef8ad9ca31a8372d0c353")
 	require.NoError(t, err)
 
@@ -382,7 +382,7 @@ func TestCloudflareCreateDNSError(t *testing.T) {
 
 	_, err = cloudflareCreateDNS(client, "example.com", IP{
 		String: "127.0.0.1",
-		Format: 4,
+		Format: net.IPv4len,
 	}, "023e105f4ecef8ad9ca31a8372d0c353")
 	require.Error(t, err)
 }
@@ -442,7 +442,7 @@ func TestCloudflareUpdateDNSSuccess(t *testing.T) {
 
 	err = cloudflareUpdateDNS(client, IP{
 		String: "127.0.0.1",
-		Format: 4,
+		Format: net.IPv4len,
 	}, "023e105f4ecef8ad9ca31a8372d0c353", "372e67954025e0ba6aaa6d586b9e0b59")
 	require.NoError(t, err)
 
@@ -506,7 +506,7 @@ func TestCloudflareUpdateDNSError(t *testing.T) {
 
 	err = cloudflareUpdateDNS(client, IP{
 		String: "127.0.0.1",
-		Format: 4,
+		Format: net.IPv4len,
 	}, "023e105f4ecef8ad9ca31a8372d0c353", "372e67954025e0ba6aaa6d586b9e0b59")
 	require.Error(t, err)
 }
