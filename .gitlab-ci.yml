@@ -14,7 +14,7 @@ cache:
     - /binaries/
 
 before_script:
-  - apt-get update && apt-get install -y make
+  - apt-get update && apt-get install -y make curl
   - mkdir -p /go/src/gitlab.com/_p0l0_
   - ln -s /builds/_p0l0_/cloudflare-dyndns /go/src/gitlab.com/_p0l0_/cloudflare-dyndns
   - cd /go/src/gitlab.com/_p0l0_/cloudflare-dyndns
