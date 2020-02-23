@@ -52,14 +52,18 @@ compile:
   script:
     - VERSION="$(<.next-version)" make
     - cp build/cloudflare-dyndns-$(<.next-version)-linux_amd64 cloudflare-dyndns-linux_amd64
+    - cp build/cloudflare-dyndns-$(<.next-version)-linux_386 cloudflare-dyndns-linux_386
     - cp build/cloudflare-dyndns-$(<.next-version)-linux_arm cloudflare-dyndns-linux_arm
+    - cp build/cloudflare-dyndns-$(<.next-version)-linux_arm64 cloudflare-dyndns-linux_arm64
     - cp build/cloudflare-dyndns-$(<.next-version)-darwin_amd64 cloudflare-dyndns-darwin
     - echo "RELEASE_URL=https://gitlab.com/api/v4/projects/$CI_PROJECT_ID/jobs/$CI_JOB_ID/artifacts" > build_info
   artifacts:
     paths:
       - build_info
       - cloudflare-dyndns-linux_amd64
+      - cloudflare-dyndns-linux_386
       - cloudflare-dyndns-linux_arm
+      - cloudflare-dyndns-linux_arm64
       - cloudflare-dyndns-darwin
   except:
     - tags
@@ -71,6 +75,8 @@ release:
     - . build_info
     - $RELEASE_BIN changelog
     - $RELEASE_BIN commit-and-tag CHANGELOG.md release_info
-    - $RELEASE_BIN --ci-commit-tag v$(<.next-version) add-download-link -n cloudflare-dyndns-linux_amd64 -u ${RELEASE_URL}/cloudflare-dyndns-linux_amd64 -d "Linux amd64 Binary"
+    - $RELEASE_BIN --ci-commit-tag v$(<.next-version) add-download-link -n cloudflare-dyndns-linux_amd64 -u ${RELEASE_URL}/cloudflare-dyndns-linux_amd64 -d "Linux AMD64 Binary"
+    - $RELEASE_BIN --ci-commit-tag v$(<.next-version) add-download-link -n cloudflare-dyndns-linux_amd64 -u ${RELEASE_URL}/cloudflare-dyndns-linux_386 -d "Linux i386 Binary"
     - $RELEASE_BIN --ci-commit-tag v$(<.next-version) add-download-link -n cloudflare-dyndns-linux_arm -u ${RELEASE_URL}/cloudflare-dyndns-linux_arm -d "Linux ARM Binary"
+    - $RELEASE_BIN --ci-commit-tag v$(<.next-version) add-download-link -n cloudflare-dyndns-linux_arm -u ${RELEASE_URL}/cloudflare-dyndns-linux_arm64 -d "Linux ARM64 Binary"
     - $RELEASE_BIN --ci-commit-tag v$(<.next-version) add-download-link -n cloudflare-dyndns-darwin -u ${RELEASE_URL}/cloudflare-dyndns-darwin -d "MacOS Binary"

@@ -5,6 +5,7 @@ go 1.12
 require (
 	github.com/cloudflare/cloudflare-go v0.11.2
 	github.com/glendc/go-external-ip v0.0.0-20170425150139-139229dcdddd
+	github.com/hashicorp/go-version v1.2.0 // indirect
 	github.com/mitchellh/gox v1.0.1 // indirect
 	github.com/stretchr/testify v1.4.0
 	golang.org/x/crypto v0.0.0-20200221231518-2aa609cf4a9d // indirect
