@@ -16,7 +16,7 @@ test:
 
 lint:
 	$(info Running linting...)
-	@cd $(SRCDIR); go get -u github.com/golang/lint/golint ; golint -set_exit_status .
+	@cd $(SRCDIR); go get -u golang.org/x/lint/golint ; golint -set_exit_status .
 
 coverage: test
 	@cd $(SRCDIR); go tool cover -html=.coverage.html
