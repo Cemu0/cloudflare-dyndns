@@ -46,7 +46,7 @@ compile:
     - cp build/cloudflare-dyndns-$(<.next-version)-linux_amd64 cloudflare-dyndns-linux_amd64
     - cp build/cloudflare-dyndns-$(<.next-version)-linux_arm cloudflare-dyndns-linux_arm
     - cp build/cloudflare-dyndns-$(<.next-version)-darwin_amd64 cloudflare-dyndns-darwin
-    - echo "RELEASE_URL=https://gitlab.com/api/v4/projects/$CI_PROJECT_ID/jobs/$CI_JOB_ID/artifacts/build" > build_info
+    - echo "RELEASE_URL=https://gitlab.com/api/v4/projects/$CI_PROJECT_ID/jobs/$CI_JOB_ID/artifacts" > build_info
   artifacts:
     paths:
       - build_info
