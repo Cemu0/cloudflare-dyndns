@@ -2,6 +2,14 @@
 
 <!--- next entry here -->
 
+## 0.2.1
+2020-02-23
+
+### Fixes
+
+- Change License to MIT (3e2d84b5a86a51a2fe33f95daad437bc3ec4593b)
+- Corrected Release download URL (5fff7a172b113665e4e876eee5f35a336c6a42fd)
+
 ## 0.2.0
 2020-02-23
 
