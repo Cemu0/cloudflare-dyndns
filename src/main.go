@@ -113,7 +113,7 @@ func cloudflareConnect(config Config) (*cloudflare.API, error) {
 	if config.Cloudflare.APIToken != "" {
 		log.Println("Connect to Cloudflare using APIToken")
 		return cloudflare.NewWithAPIToken(config.Cloudflare.APIToken)
-	} else if (config.Cloudflare.APIKey != "" && config.Cloudflare.Email != "") {
+	} else if config.Cloudflare.APIKey != "" && config.Cloudflare.Email != "" {
 		log.Println("Connect to Cloudflare using APIKey")
 		return cloudflare.New(config.Cloudflare.APIKey, config.Cloudflare.Email)
 	}
@@ -154,11 +154,11 @@ func cloudflareCreateDNS(api *cloudflare.API, DNS string, externalIP IP, zoneID 
 	}
 
 	dnsRecord := cloudflare.DNSRecord{
-		Name: DNS,
+		Name:    DNS,
 		Content: externalIP.String,
-		Type: recordType,
+		Type:    recordType,
 		Proxied: false,
-		TTL: 120,
+		TTL:     120,
 	}
 
 	log.Printf("Creating new DNS %s Record for %s to IP %s", recordType, DNS, externalIP.String)
@@ -177,7 +177,7 @@ func cloudflareUpdateDNS(api *cloudflare.API, externalIP IP, zoneID string, reco
 
 // Initializes and sets the logger
 func initializeLog(logFile string) (*os.File, error) {
-	logFileFd, err := os.OpenFile(logFile, os.O_RDWR | os.O_CREATE | os.O_APPEND, 0666)
+	logFileFd, err := os.OpenFile(logFile, os.O_RDWR|os.O_CREATE|os.O_APPEND, 0666)
 	if err != nil {
 		return &os.File{}, fmt.Errorf("error opening file: %v", err)
 	}
@@ -220,7 +220,6 @@ func initialize() (Config, *os.File, error) {
 
 	return config, logFileFd, nil
 }
-
 
 func main() {
 	config, logFile, err := initialize()
@@ -268,6 +267,11 @@ func main() {
 
 	// Search for Entry at Cloudflare
 	records, err := cloudflareGetDNSRecord(api, zoneID, destDNS)
+	if err != nil {
+		log.Fatal(err)
+		return
+	}
+
 	if len(records) <= 0 {
 		log.Printf("DNSRecord not found, try to create new entry for %s", destDNS)
 		_, err = cloudflareCreateDNS(api, destDNS, externalIP, zoneID)

@@ -88,7 +88,6 @@ func TestGetCurrentDNSIP(t *testing.T) {
 		assert.Failf(t, "Invalid IP Format found", "IP found like: %v", ip)
 	}
 
-
 	_, err = getCurrentDNSIP("not.valid.dns")
 	require.Error(t, err)
 }
@@ -221,7 +220,7 @@ func TestCloudflareGetZoneIDError(t *testing.T) {
 
 		w.Header().Add("Content-Type", "application/json")
 		w.WriteHeader(403)
-		fmt.Fprintf(w,"Error")
+		fmt.Fprintf(w, "Error")
 	})
 
 	_, err = cloudflareGetZoneID(client, "example.com")
@@ -272,7 +271,7 @@ func TestCloudflareGetDNSRecordError(t *testing.T) {
 
 		w.Header().Add("Content-Type", "application/json")
 		w.WriteHeader(403)
-		fmt.Fprintf(w,"Error")
+		fmt.Fprintf(w, "Error")
 	})
 
 	_, err = cloudflareGetDNSRecord(client, "023e105f4ecef8ad9ca31a8372d0c353", "example.com")
@@ -377,7 +376,7 @@ func TestCloudflareCreateDNSError(t *testing.T) {
 
 		w.Header().Add("Content-Type", "application/json")
 		w.WriteHeader(403)
-		fmt.Fprintf(w,"Error")
+		fmt.Fprintf(w, "Error")
 	})
 
 	_, err = cloudflareCreateDNS(client, "example.com", IP{
@@ -501,7 +500,7 @@ func TestCloudflareUpdateDNSError(t *testing.T) {
 
 		w.Header().Add("Content-Type", "application/json")
 		w.WriteHeader(403)
-		fmt.Fprintf(w,"Error")
+		fmt.Fprintf(w, "Error")
 	})
 
 	err = cloudflareUpdateDNS(client, IP{
