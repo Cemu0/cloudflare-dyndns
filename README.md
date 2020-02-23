@@ -1,5 +1,3 @@
-[![pipeline status](https://gitlab.com/_p0l0_/cloudflare-dyndns/badges/master/pipeline.svg)](https://gitlab.com/_p0l0_/cloudflare-dyndns/commits/master) [![coverage report](https://gitlab.com/_p0l0_/cloudflare-dyndns/badges/master/coverage.svg)](https://gitlab.com/_p0l0_/cloudflare-dyndns/commits/master) [![Go Report Card](https://goreportcard.com/badge/gitlab.com/_p0l0_/cloudflare-dyndns)](https://goreportcard.com/report/gitlab.com/_p0l0_/cloudflare-dyndns) [![License MIT](https://img.shields.io/badge/License-MIT-brightgreen.svg)](https://img.shields.io/badge/License-MIT-brightgreen.svg)
-
 # Cloudflare DynDNS Client
 
 A DynDNS Client using Cloudflare API
