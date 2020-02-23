@@ -7,7 +7,7 @@ SRCDIR=src
 
 all:
 	$(info Compiling binaries (v$(VERSION))...)
-	@cd $(SRCDIR); go get github.com/mitchellh/gox ; CGO_ENABLED=0 gox -osarch="linux/amd64 darwin/amd64 linux/arm" -output="$(DESTDIR)/cloudflare-dyndns-$(VERSION)-{{.OS}}_{{.Arch}}" -ldflags="-X 'main.Version=v$(VERSION)'"
+	@cd $(SRCDIR); go get -u github.com/mitchellh/gox ; CGO_ENABLED=0 gox -osarch="linux/amd64 darwin/amd64 linux/arm" -output="$(DESTDIR)/cloudflare-dyndns-$(VERSION)-{{.OS}}_{{.Arch}}" -ldflags="-X 'main.Version=v$(VERSION)'"
 
 test:
 	$(info Running tests...)
@@ -16,7 +16,7 @@ test:
 
 lint:
 	$(info Running linting...)
-	@cd $(SRCDIR); golint -set_exit_status .
+	@cd $(SRCDIR); go get -u github.com/golang/lint/golint ; golint -set_exit_status .
 
 coverage: test
 	@cd $(SRCDIR); go tool cover -html=.coverage.html
