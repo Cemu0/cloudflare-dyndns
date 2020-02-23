@@ -2,6 +2,17 @@
 
 <!--- next entry here -->
 
+## 1.1.0
+2020-02-23
+
+### Features
+
+- Added binaries for Linux ARM64 and Linux 386 (ed5ef0bef3e838ea4406373ae9b82cfeefd18d8d)
+
+### Fixes
+
+- fixed release links (b74dbf40f261c18a8e8bb2b44ce6c6848f90857c)
+
 ## 1.0.0
 2020-02-23
 
