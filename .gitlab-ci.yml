@@ -42,8 +42,8 @@ test:
 compile:
   stage: build
   script:
-    - make
-    - cp build/cloudflare-dyndns-1.1.0-linux_amd64 cloudflare-dyndns
+    - VERSION="$(<.next-version)" make
+    - cp build/cloudflare-dyndns-$(<.next-version)-linux_amd64 cloudflare-dyndns
     - echo "RELEASE_URL=https://gitlab.com/api/v4/projects/$CI_PROJECT_ID/jobs/$CI_JOB_ID/artifacts/cloudflare-dyndns" > build_info
     - echo "RELEASE_DESC=\"Linux AMD64 binary\"" >> build_info
   artifacts:
