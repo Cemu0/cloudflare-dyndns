@@ -6,6 +6,7 @@ variables:
 
 stages:
   - version
+  - test
   - build
   - release
 
@@ -33,9 +34,16 @@ version:
     - tags
 
 test:
-  stage: build
+  stage: test
   script:
     - make test
+  except:
+    - tags
+
+lint:
+  stage: test
+  script:
+    - make lint
   except:
     - tags
 

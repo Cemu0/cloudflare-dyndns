@@ -16,8 +16,8 @@ import (
 	"time"
 )
 
-const defaultApiKeyConfigFile = "../config/config-default-apiKey.json"
-const defaultApiTokenConfigFile = "../config/config-default-apiToken.json"
+const defaultAPIKeyConfigFile = "../config/config-default-apiKey.json"
+const defaultAPITokenConfigFile = "../config/config-default-apiToken.json"
 
 func TestLoadConfigError(t *testing.T) {
 	config, err := loadConfig("dummy.json")
@@ -27,12 +27,12 @@ func TestLoadConfigError(t *testing.T) {
 
 func TestLoadConfigApiKey(t *testing.T) {
 	defaultConfig := Config{}
-	defaultConfig.Cloudflare.ApiKey = "key"
+	defaultConfig.Cloudflare.APIKey = "key"
 	defaultConfig.Cloudflare.Email = "my@email.com"
 	defaultConfig.DNS.Zone = "domain.com"
 	defaultConfig.DNS.Record = "subdomain"
 
-	config, err := loadConfig(defaultApiKeyConfigFile)
+	config, err := loadConfig(defaultAPIKeyConfigFile)
 	require.NoError(t, err)
 	assert.IsType(t, Config{}, config)
 	assert.Equal(t, defaultConfig, config)
@@ -40,11 +40,11 @@ func TestLoadConfigApiKey(t *testing.T) {
 
 func TestLoadConfigApiToken(t *testing.T) {
 	defaultConfig := Config{}
-	defaultConfig.Cloudflare.ApiToken = "token"
+	defaultConfig.Cloudflare.APIToken = "token"
 	defaultConfig.DNS.Zone = "domain.com"
 	defaultConfig.DNS.Record = "subdomain"
 
-	config, err := loadConfig(defaultApiTokenConfigFile)
+	config, err := loadConfig(defaultAPITokenConfigFile)
 	require.NoError(t, err)
 	assert.IsType(t, Config{}, config)
 	assert.Equal(t, defaultConfig, config)
@@ -153,7 +153,7 @@ func teardown() {
 
 func TestCloudflareConnect(t *testing.T) {
 	defaultTokenConfig := Config{}
-	defaultTokenConfig.Cloudflare.ApiToken = "token"
+	defaultTokenConfig.Cloudflare.APIToken = "token"
 	defaultTokenConfig.DNS.Zone = "domain.com"
 	defaultTokenConfig.DNS.Record = "subdomain"
 	api, err := cloudflareConnect(defaultTokenConfig)
@@ -161,7 +161,7 @@ func TestCloudflareConnect(t *testing.T) {
 	assert.IsType(t, &cloudflare.API{}, api)
 
 	defaultKeyConfig := Config{}
-	defaultKeyConfig.Cloudflare.ApiKey = "key"
+	defaultKeyConfig.Cloudflare.APIKey = "key"
 	defaultKeyConfig.Cloudflare.Email = "my@email.com"
 	defaultKeyConfig.DNS.Zone = "domain.com"
 	defaultKeyConfig.DNS.Record = "subdomain"
@@ -553,12 +553,12 @@ func TestInitializeOnlyConfig(t *testing.T) {
 	ResetFlagsForTesting(nil)
 
 	defaultConfig := Config{}
-	defaultConfig.Cloudflare.ApiToken = "token"
+	defaultConfig.Cloudflare.APIToken = "token"
 	defaultConfig.DNS.Zone = "domain.com"
 	defaultConfig.DNS.Record = "subdomain"
 
 	flag.CommandLine.SetOutput(ioutil.Discard)
-	os.Args = []string{"cmd", "-c", defaultApiTokenConfigFile}
+	os.Args = []string{"cmd", "-c", defaultAPITokenConfigFile}
 	config, logFile, err := initialize()
 
 	require.NoError(t, err)
@@ -573,7 +573,7 @@ func TestInitializeAllParamsInvalidLogfile(t *testing.T) {
 	ResetFlagsForTesting(nil)
 
 	flag.CommandLine.SetOutput(ioutil.Discard)
-	os.Args = []string{"cmd", "-c", defaultApiTokenConfigFile, "-l", "/tmp/"}
+	os.Args = []string{"cmd", "-c", defaultAPITokenConfigFile, "-l", "/tmp/"}
 	_, _, err := initialize()
 
 	require.Error(t, err)
@@ -593,14 +593,14 @@ func TestInitializeAllParams(t *testing.T) {
 	ResetFlagsForTesting(nil)
 
 	defaultConfig := Config{}
-	defaultConfig.Cloudflare.ApiToken = "token"
+	defaultConfig.Cloudflare.APIToken = "token"
 	defaultConfig.DNS.Zone = "domain.com"
 	defaultConfig.DNS.Record = "subdomain"
 
 	logFileName := "/tmp/all.log"
 
 	flag.CommandLine.SetOutput(ioutil.Discard)
-	os.Args = []string{"cmd", "-c", defaultApiTokenConfigFile, "-l", logFileName}
+	os.Args = []string{"cmd", "-c", defaultAPITokenConfigFile, "-l", logFileName}
 	config, logFile, err := initialize()
 
 	require.NoError(t, err)

@@ -3,7 +3,7 @@ GO111MODULE=on
 DESTDIR=../build
 SRCDIR=src
 
-.PHONY: all test coverage racetest
+.PHONY: all test lint coverage racetest
 
 all:
 	$(info Compiling binaries (v$(VERSION))...)
@@ -13,6 +13,10 @@ test:
 	$(info Running tests...)
 	@cd $(SRCDIR); go test -v -coverprofile .coverage.txt
 	@cd $(SRCDIR); go tool cover -func .coverage.txt
+
+lint:
+	$(info Running linting...)
+	@cd $(SRCDIR); golint -set_exit_status .
 
 coverage: test
 	@cd $(SRCDIR); go tool cover -html=.coverage.html

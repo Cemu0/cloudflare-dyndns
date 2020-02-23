@@ -12,13 +12,15 @@ import (
 	"os"
 )
 
+// Version of the Application, should be overwritten on compile
 var Version = "v0.0.0"
 
+// Config struct for the configuration file
 type Config struct {
 	Cloudflare struct {
-		ApiToken string `json:"apiToken"`
-		ApiKey	string	`json:"apiKey"`
-		Email	string	`json:"email"`
+		APIToken string `json:"apiToken"`
+		APIKey   string `json:"apiKey"`
+		Email    string `json:"email"`
 	} `json:"cloudflare"`
 	DNS struct {
 		Zone   string `json:"name"`
@@ -26,6 +28,7 @@ type Config struct {
 	} `json:"dnsZone"`
 }
 
+// IP struct for better usage of IPs
 type IP struct {
 	String string
 	Format int
@@ -107,15 +110,15 @@ func getDNSRecordType(externalIP IP) (string, error) {
 
 // Opens connection to Cloudflare API
 func cloudflareConnect(config Config) (*cloudflare.API, error) {
-	if config.Cloudflare.ApiToken != "" {
-		log.Println("Connect to Cloudflare using ApiToken")
-		return cloudflare.NewWithAPIToken(config.Cloudflare.ApiToken)
-	} else if (config.Cloudflare.ApiKey != "" && config.Cloudflare.Email != "") {
-		log.Println("Connect to Cloudflare using ApiKey")
-		return cloudflare.New(config.Cloudflare.ApiKey, config.Cloudflare.Email)
+	if config.Cloudflare.APIToken != "" {
+		log.Println("Connect to Cloudflare using APIToken")
+		return cloudflare.NewWithAPIToken(config.Cloudflare.APIToken)
+	} else if (config.Cloudflare.APIKey != "" && config.Cloudflare.Email != "") {
+		log.Println("Connect to Cloudflare using APIKey")
+		return cloudflare.New(config.Cloudflare.APIKey, config.Cloudflare.Email)
 	}
 
-	return &cloudflare.API{}, errors.New("No credentials provided!")
+	return &cloudflare.API{}, errors.New("no credentials provided")
 }
 
 // Returns the Cloudflare zoneID for the given DNSZone
@@ -176,7 +179,7 @@ func cloudflareUpdateDNS(api *cloudflare.API, externalIP IP, zoneID string, reco
 func initializeLog(logFile string) (*os.File, error) {
 	logFileFd, err := os.OpenFile(logFile, os.O_RDWR | os.O_CREATE | os.O_APPEND, 0666)
 	if err != nil {
-		return &os.File{}, errors.New(fmt.Sprintf("Error opening file: %v", err))
+		return &os.File{}, fmt.Errorf("error opening file: %v", err)
 	}
 	log.SetOutput(logFileFd)
 
