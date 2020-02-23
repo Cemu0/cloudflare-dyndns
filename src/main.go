@@ -194,7 +194,7 @@ func initialize() (Config, *os.File, error) {
 
 	// Parse CLI Params
 	configFile := flag.String("c", "", "Use `file.json` as configuration file")
-	logFile := flag.String("l", "cloudflare-dyndns.log", "Use `logfile` as output")
+	logFile := flag.String("l", os.Stdout.Name(), "Use `logfile` as output")
 
 	flag.Parse()
 

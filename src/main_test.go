@@ -565,7 +565,7 @@ func TestInitializeOnlyConfig(t *testing.T) {
 	assert.IsType(t, Config{}, config)
 	assert.IsType(t, &os.File{}, logFile)
 	assert.Equal(t, defaultConfig, config)
-	assert.Equal(t, "cloudflare-dyndns.log", logFile.Name())
+	assert.Equal(t, os.Stdout.Name(), logFile.Name())
 	assert.FileExists(t, logFile.Name())
 }
 
