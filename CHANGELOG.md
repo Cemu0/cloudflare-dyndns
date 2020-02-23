@@ -2,6 +2,13 @@
 
 <!--- next entry here -->
 
+## 0.2.0
+2020-02-23
+
+### Features
+
+- Changed default log output to STDOUT (9a2646b1b1737d680b3dda820155b4298ffab837)
+
 ## 0.1.0
 2020-02-23
 
