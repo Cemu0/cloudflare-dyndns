@@ -2,6 +2,14 @@
 
 <!--- next entry here -->
 
+## 1.0.0
+2020-02-23
+
+### Fixes
+
+- added linting and cleaned up code (f7222f7f00dc3f0bc3c46faff68f7fd0ddfaeddd)
+- gofmt files and fixed ineffassign error (7a2539aa3b11d2f52abb411ba1a5882e86db3306)
+
 ## 0.2.1
 2020-02-23
 
