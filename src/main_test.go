@@ -5,6 +5,7 @@ import (
 	"flag"
 	"fmt"
 	"github.com/cloudflare/cloudflare-go"
+	log "github.com/sirupsen/logrus"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 	"io/ioutil"
@@ -523,6 +524,15 @@ func ResetFlagsForTesting(usage func()) {
 	flag.Usage = usage
 }
 
+func getDefaultConfig() Config {
+	defaultConfig := Config{}
+	defaultConfig.Cloudflare.APIToken = "token"
+	defaultConfig.DNS.Zone = "domain.com"
+	defaultConfig.DNS.Record = "subdomain"
+
+	return defaultConfig
+}
+
 func TestInitializeNoParams(t *testing.T) {
 
 	ResetFlagsForTesting(nil)
@@ -551,10 +561,7 @@ func TestInitializeOnlyLog(t *testing.T) {
 func TestInitializeOnlyConfig(t *testing.T) {
 	ResetFlagsForTesting(nil)
 
-	defaultConfig := Config{}
-	defaultConfig.Cloudflare.APIToken = "token"
-	defaultConfig.DNS.Zone = "domain.com"
-	defaultConfig.DNS.Record = "subdomain"
+	defaultConfig := getDefaultConfig()
 
 	flag.CommandLine.SetOutput(ioutil.Discard)
 	os.Args = []string{"cmd", "-c", defaultAPITokenConfigFile}
@@ -566,6 +573,16 @@ func TestInitializeOnlyConfig(t *testing.T) {
 	assert.Equal(t, defaultConfig, config)
 	assert.Equal(t, os.Stdout.Name(), logFile.Name())
 	assert.FileExists(t, logFile.Name())
+}
+
+func TestInitializeInvalidJSONConfig(t *testing.T) {
+	ResetFlagsForTesting(nil)
+
+	flag.CommandLine.SetOutput(ioutil.Discard)
+	os.Args = []string{"cmd", "-c", "main.go"}
+	_, _, err := initialize()
+
+	require.Error(t, err)
 }
 
 func TestInitializeAllParamsInvalidLogfile(t *testing.T) {
@@ -588,13 +605,136 @@ func TestInitializeAllParamsInvalidConfigFile(t *testing.T) {
 	require.Error(t, err)
 }
 
+func TestInitializeNoLogLevel(t *testing.T) {
+	ResetFlagsForTesting(nil)
+
+	defaultConfig := getDefaultConfig()
+
+	flag.CommandLine.SetOutput(ioutil.Discard)
+	os.Args = []string{"cmd", "-c", defaultAPITokenConfigFile, "-l", "/tmp/test.log"}
+	config, logFile, err := initialize()
+
+	require.NoError(t, err)
+	assert.IsType(t, Config{}, config)
+	assert.IsType(t, &os.File{}, logFile)
+	assert.Equal(t, defaultConfig, config)
+	assert.Equal(t, "/tmp/test.log", logFile.Name())
+	assert.FileExists(t, logFile.Name())
+	assert.Equal(t, log.FatalLevel, log.GetLevel())
+}
+
+func TestInitializeLogLevelFatal(t *testing.T) {
+	ResetFlagsForTesting(nil)
+
+	defaultConfig := getDefaultConfig()
+
+	flag.CommandLine.SetOutput(ioutil.Discard)
+	os.Args = []string{"cmd", "-c", defaultAPITokenConfigFile, "-l", "/tmp/test.log", "-ll", "1"}
+	config, logFile, err := initialize()
+
+	require.NoError(t, err)
+	assert.IsType(t, Config{}, config)
+	assert.IsType(t, &os.File{}, logFile)
+	assert.Equal(t, defaultConfig, config)
+	assert.Equal(t, "/tmp/test.log", logFile.Name())
+	assert.FileExists(t, logFile.Name())
+	assert.Equal(t, log.FatalLevel, log.GetLevel())
+}
+
+func TestInitializeLogLevelError(t *testing.T) {
+	ResetFlagsForTesting(nil)
+
+	defaultConfig := getDefaultConfig()
+
+	flag.CommandLine.SetOutput(ioutil.Discard)
+	os.Args = []string{"cmd", "-c", defaultAPITokenConfigFile, "-l", "/tmp/test.log", "-ll", "2"}
+	config, logFile, err := initialize()
+
+	require.NoError(t, err)
+	assert.IsType(t, Config{}, config)
+	assert.IsType(t, &os.File{}, logFile)
+	assert.Equal(t, defaultConfig, config)
+	assert.Equal(t, "/tmp/test.log", logFile.Name())
+	assert.FileExists(t, logFile.Name())
+	assert.Equal(t, log.ErrorLevel, log.GetLevel())
+}
+
+func TestInitializeLogLevelWarn(t *testing.T) {
+	ResetFlagsForTesting(nil)
+
+	defaultConfig := getDefaultConfig()
+
+	flag.CommandLine.SetOutput(ioutil.Discard)
+	os.Args = []string{"cmd", "-c", defaultAPITokenConfigFile, "-l", "/tmp/test.log", "-ll", "3"}
+	config, logFile, err := initialize()
+
+	require.NoError(t, err)
+	assert.IsType(t, Config{}, config)
+	assert.IsType(t, &os.File{}, logFile)
+	assert.Equal(t, defaultConfig, config)
+	assert.Equal(t, "/tmp/test.log", logFile.Name())
+	assert.FileExists(t, logFile.Name())
+	assert.Equal(t, log.WarnLevel, log.GetLevel())
+}
+
+func TestInitializeLogLevelInfo(t *testing.T) {
+	ResetFlagsForTesting(nil)
+
+	defaultConfig := getDefaultConfig()
+
+	flag.CommandLine.SetOutput(ioutil.Discard)
+	os.Args = []string{"cmd", "-c", defaultAPITokenConfigFile, "-l", "/tmp/test.log", "-ll", "4"}
+	config, logFile, err := initialize()
+
+	require.NoError(t, err)
+	assert.IsType(t, Config{}, config)
+	assert.IsType(t, &os.File{}, logFile)
+	assert.Equal(t, defaultConfig, config)
+	assert.Equal(t, "/tmp/test.log", logFile.Name())
+	assert.FileExists(t, logFile.Name())
+	assert.Equal(t, log.InfoLevel, log.GetLevel())
+}
+
+func TestInitializeLogLevelDebug(t *testing.T) {
+	ResetFlagsForTesting(nil)
+
+	defaultConfig := getDefaultConfig()
+
+	flag.CommandLine.SetOutput(ioutil.Discard)
+	os.Args = []string{"cmd", "-c", defaultAPITokenConfigFile, "-l", "/tmp/test.log", "-ll", "5"}
+	config, logFile, err := initialize()
+
+	require.NoError(t, err)
+	assert.IsType(t, Config{}, config)
+	assert.IsType(t, &os.File{}, logFile)
+	assert.Equal(t, defaultConfig, config)
+	assert.Equal(t, "/tmp/test.log", logFile.Name())
+	assert.FileExists(t, logFile.Name())
+	assert.Equal(t, log.DebugLevel, log.GetLevel())
+}
+
+func TestInitializeLogLevelInvalid(t *testing.T) {
+	ResetFlagsForTesting(nil)
+
+	defaultConfig := getDefaultConfig()
+
+	flag.CommandLine.SetOutput(ioutil.Discard)
+	os.Args = []string{"cmd", "-c", defaultAPITokenConfigFile, "-l", "/tmp/test.log", "-ll", "10"}
+	config, logFile, err := initialize()
+
+	require.NoError(t, err)
+	assert.IsType(t, Config{}, config)
+	assert.IsType(t, &os.File{}, logFile)
+	assert.Equal(t, defaultConfig, config)
+	assert.Equal(t, "/tmp/test.log", logFile.Name())
+	assert.FileExists(t, logFile.Name())
+	assert.Equal(t, log.FatalLevel, log.GetLevel())
+}
+
 func TestInitializeAllParams(t *testing.T) {
 	ResetFlagsForTesting(nil)
 
-	defaultConfig := Config{}
-	defaultConfig.Cloudflare.APIToken = "token"
-	defaultConfig.DNS.Zone = "domain.com"
-	defaultConfig.DNS.Record = "subdomain"
+	defaultConfig := getDefaultConfig()
 
 	logFileName := "/tmp/all.log"
 
