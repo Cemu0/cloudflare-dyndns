@@ -76,7 +76,7 @@ release:
     - $RELEASE_BIN changelog
     - $RELEASE_BIN commit-and-tag CHANGELOG.md release_info
     - $RELEASE_BIN --ci-commit-tag v$(<.next-version) add-download-link -n cloudflare-dyndns-linux_amd64 -u ${RELEASE_URL}/cloudflare-dyndns-linux_amd64 -d "Linux AMD64 Binary"
-    - $RELEASE_BIN --ci-commit-tag v$(<.next-version) add-download-link -n cloudflare-dyndns-linux_amd64 -u ${RELEASE_URL}/cloudflare-dyndns-linux_386 -d "Linux i386 Binary"
+    - $RELEASE_BIN --ci-commit-tag v$(<.next-version) add-download-link -n cloudflare-dyndns-linux_386 -u ${RELEASE_URL}/cloudflare-dyndns-linux_386 -d "Linux i386 Binary"
     - $RELEASE_BIN --ci-commit-tag v$(<.next-version) add-download-link -n cloudflare-dyndns-linux_arm -u ${RELEASE_URL}/cloudflare-dyndns-linux_arm -d "Linux ARM Binary"
-    - $RELEASE_BIN --ci-commit-tag v$(<.next-version) add-download-link -n cloudflare-dyndns-linux_arm -u ${RELEASE_URL}/cloudflare-dyndns-linux_arm64 -d "Linux ARM64 Binary"
+    - $RELEASE_BIN --ci-commit-tag v$(<.next-version) add-download-link -n cloudflare-dyndns-linux_arm64 -u ${RELEASE_URL}/cloudflare-dyndns-linux_arm64 -d "Linux ARM64 Binary"
     - $RELEASE_BIN --ci-commit-tag v$(<.next-version) add-download-link -n cloudflare-dyndns-darwin -u ${RELEASE_URL}/cloudflare-dyndns-darwin -d "MacOS Binary"
