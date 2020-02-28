@@ -2,6 +2,13 @@
 
 <!--- next entry here -->
 
+## 1.2.0
+2020-02-28
+
+### Features
+
+- added the possibility to steer the log level (63d3ec04f621facdafad6097f5f29d6c0ac48490)
+
 ## 1.1.0
 2020-02-23
 
