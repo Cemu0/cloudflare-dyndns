@@ -2,6 +2,13 @@
 
 <!--- next entry here -->
 
+## 1.3.0
+2020-03-05
+
+### Features
+
+- Implemented support for root domain using '@'. Ref #1 (cc41c405f13dcd661f209f98b35424b4d8d5d7c1)
+
 ## 1.2.0
 2020-02-28
 
