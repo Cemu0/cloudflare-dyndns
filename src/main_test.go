@@ -119,6 +119,26 @@ func TestGetDNSRecordType(t *testing.T) {
 	assert.Equal(t, "", ipvInvalid)
 }
 
+func TestGetDestDNSSubdomain(t *testing.T) {
+	defaultConfig := Config{}
+	defaultConfig.Cloudflare.APIToken = "token"
+	defaultConfig.DNS.Zone = "domain.com"
+	defaultConfig.DNS.Record = "subdomain"
+
+	destDNS := getDestDNS(defaultConfig)
+	assert.Equal(t, "subdomain.domain.com", destDNS)
+}
+
+func TestGetDestDNSRootlevel(t *testing.T) {
+	defaultConfig := Config{}
+	defaultConfig.Cloudflare.APIToken = "token"
+	defaultConfig.DNS.Zone = "domain.com"
+	defaultConfig.DNS.Record = "@"
+
+	destDNS := getDestDNS(defaultConfig)
+	assert.Equal(t, "domain.com", destDNS)
+}
+
 /**
  * Cloudflare Server Mocking
  * @see https://github.com/cloudflare/cloudflare-go/blob/master/cloudflare_test.go

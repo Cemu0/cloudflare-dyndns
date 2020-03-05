@@ -71,6 +71,9 @@ compile:
 
 release:
   stage: release
+  only:
+    refs:
+      - master
   script:
     - . build_info
     - $RELEASE_BIN changelog

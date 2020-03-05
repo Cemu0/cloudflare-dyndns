@@ -178,6 +178,15 @@ func cloudflareUpdateDNS(api *cloudflare.API, externalIP IP, zoneID string, reco
 	return api.UpdateDNSRecord(zoneID, recordID, cloudflare.DNSRecord{Content: externalIP.String, Type: recordType, TTL: 120})
 }
 
+// Returns composed Destination DNS
+func getDestDNS(config Config) string {
+	if config.DNS.Record == "@" {
+		return config.DNS.Zone
+	}
+
+	return config.DNS.Record + "." + config.DNS.Zone
+}
+
 // Initializes and sets the logger
 func initializeLog(logFile string) (*os.File, error) {
 	logFileFd, err := os.OpenFile(logFile, os.O_RDWR|os.O_CREATE|os.O_APPEND, 0666)
@@ -263,7 +272,7 @@ func main() {
 	log.Debugf("Found externalIP: %s", externalIP.String)
 
 	//Check if IP has changed
-	destDNS := config.DNS.Record + "." + config.DNS.Zone
+	destDNS := getDestDNS(config)
 	currentIP, err := getCurrentDNSIP(destDNS)
 	if err == nil && currentIP.String == externalIP.String {
 		log.Infof("IP didn't change, exiting")
