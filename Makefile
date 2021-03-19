@@ -11,17 +11,17 @@ all:
 
 test:
 	$(info Running tests...)
-	@cd $(SRCDIR); go test -v -coverprofile .coverage.txt
-	@cd $(SRCDIR); go tool cover -func .coverage.txt
+	@cd $(SRCDIR); go test -v -coverprofile coverage.txt -covermode=atomic
+	@cd $(SRCDIR); go tool cover -func coverage.txt
 
 lint:
 	$(info Running linting...)
 	@cd $(SRCDIR); go get -u golang.org/x/lint/golint ; golint -set_exit_status .
 
 coverage: test
-	@cd $(SRCDIR); go tool cover -html=.coverage.html
+	@cd $(SRCDIR); go tool cover -html=coverage.html
 
 racetest:
 	$(info Running tests...)
-	@cd $(SRCDIR); go test -race -v -coverprofile .coverage.txt
-	@cd $(SRCDIR); go tool cover -func .coverage.txt
+	@cd $(SRCDIR); go test -race -v -coverprofile coverage.txt -covermode=atomic
+	@cd $(SRCDIR); go tool cover -func coverage.txt

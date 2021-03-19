@@ -1,5 +1,5 @@
 # Custom entries
-.coverage.txt
+coverage.txt
 config/config.json
 build/*
 *.log

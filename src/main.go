@@ -107,7 +107,7 @@ func getDNSRecordType(externalIP IP) (string, error) {
 	case net.IPv6len:
 		return "AAAA", nil
 	default:
-		return "", errors.New("Unknown IP Format " + string(externalIP.Format))
+		return "", fmt.Errorf("Unknown IP Format %d", externalIP.Format)
 	}
 }
 
