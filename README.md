@@ -1,3 +1,5 @@
+[![Go](https://github.com/p0l0/cloudflare-dyndns/actions/workflows/go.yml/badge.svg)](https://github.com/p0l0/cloudflare-dyndns/actions/workflows/go.yml) [![codecov](https://codecov.io/gh/p0l0/cloudflare-dyndns/branch/master/graph/badge.svg?token=I0X54WFSO6)](https://codecov.io/gh/p0l0/cloudflare-dyndns)
+
 # Cloudflare DynDNS Client
 
 A DynDNS Client using Cloudflare API
