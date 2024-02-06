@@ -5,6 +5,7 @@
   },
   "dnsZone": {
     "name": "domain.com",
-    "record": "subdomain"
+    "record": "subdomain",
+    "proxy": false
   }
 }

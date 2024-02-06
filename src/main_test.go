@@ -4,10 +4,6 @@ import (
 	"encoding/json"
 	"flag"
 	"fmt"
-	"github.com/cloudflare/cloudflare-go"
-	log "github.com/sirupsen/logrus"
-	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/require"
 	"io/ioutil"
 	"net"
 	"net/http"
@@ -15,6 +11,11 @@ import (
 	"os"
 	"testing"
 	"time"
+
+	"github.com/cloudflare/cloudflare-go"
+	log "github.com/sirupsen/logrus"
+	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 )
 
 const defaultAPIKeyConfigFile = "../config/config-default-apiKey.json"
@@ -89,7 +90,8 @@ func TestGetCurrentDNSIP(t *testing.T) {
 		assert.Failf(t, "Invalid IP Format found", "IP found like: %v", ip)
 	}
 
-	_, err = getCurrentDNSIP("not.valid.dns")
+	//nslookup for invalid domain
+	_, err = getCurrentDNSIP("")
 	require.Error(t, err)
 }
 
@@ -309,7 +311,7 @@ func TestCloudflareCreateDNSSuccess(t *testing.T) {
 		Name:       "example.com",
 		Content:    "127.0.0.1",
 		Proxiable:  false,
-		Proxied:    false,
+		Proxied:    true,
 		TTL:        120,
 		Locked:     false,
 		ZoneID:     "",
@@ -347,13 +349,13 @@ func TestCloudflareCreateDNSSuccess(t *testing.T) {
 	_, err = cloudflareCreateDNS(client, "example.com", IP{
 		String: "127.0.0.1",
 		Format: net.IPv4len,
-	}, "023e105f4ecef8ad9ca31a8372d0c353")
+	}, "023e105f4ecef8ad9ca31a8372d0c353", true)
 	require.NoError(t, err)
 
 	_, err = cloudflareCreateDNS(client, "example.com", IP{
 		String: "127.0.0.1",
 		Format: 10,
-	}, "023e105f4ecef8ad9ca31a8372d0c353")
+	}, "023e105f4ecef8ad9ca31a8372d0c353", true)
 	require.Error(t, err)
 }
 func TestCloudflareCreateDNSError(t *testing.T) {
@@ -366,7 +368,7 @@ func TestCloudflareCreateDNSError(t *testing.T) {
 		Name:       "example.com",
 		Content:    "127.0.0.1",
 		Proxiable:  false,
-		Proxied:    false,
+		Proxied:    true,
 		TTL:        120,
 		Locked:     false,
 		ZoneID:     "",
@@ -403,7 +405,7 @@ func TestCloudflareCreateDNSError(t *testing.T) {
 	_, err = cloudflareCreateDNS(client, "example.com", IP{
 		String: "127.0.0.1",
 		Format: net.IPv4len,
-	}, "023e105f4ecef8ad9ca31a8372d0c353")
+	}, "023e105f4ecef8ad9ca31a8372d0c353", true)
 	require.Error(t, err)
 }
 

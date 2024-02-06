@@ -5,15 +5,16 @@ import (
 	"errors"
 	"flag"
 	"fmt"
-	"github.com/cloudflare/cloudflare-go"
-	"github.com/glendc/go-external-ip"
-	log "github.com/sirupsen/logrus"
 	"net"
 	"os"
+
+	"github.com/cloudflare/cloudflare-go"
+	externalip "github.com/glendc/go-external-ip"
+	log "github.com/sirupsen/logrus"
 )
 
 // Version of the Application, should be overwritten on compile
-var Version = "v0.0.0"
+var Version = "v0.0.1"
 
 // Config struct for the configuration file
 type Config struct {
@@ -25,6 +26,7 @@ type Config struct {
 	DNS struct {
 		Zone   string `json:"name"`
 		Record string `json:"record"`
+		Proxy  bool   `json:"proxy"`
 	} `json:"dnsZone"`
 }
 
@@ -149,7 +151,7 @@ func cloudflareGetDNSRecord(api *cloudflare.API, zoneID string, DNS string) ([]c
 }
 
 // Created a new DNSRecord at Cloudflare
-func cloudflareCreateDNS(api *cloudflare.API, DNS string, externalIP IP, zoneID string) (*cloudflare.DNSRecordResponse, error) {
+func cloudflareCreateDNS(api *cloudflare.API, DNS string, externalIP IP, zoneID string, proxy bool) (*cloudflare.DNSRecordResponse, error) {
 	// Set the correct DNSRecordType
 	recordType, err := getDNSRecordType(externalIP)
 	if err != nil {
@@ -160,7 +162,7 @@ func cloudflareCreateDNS(api *cloudflare.API, DNS string, externalIP IP, zoneID 
 		Name:    DNS,
 		Content: externalIP.String,
 		Type:    recordType,
-		Proxied: false,
+		Proxied: proxy,
 		TTL:     120,
 	}
 
@@ -294,6 +296,9 @@ func main() {
 		return
 	}
 
+	proxy := config.DNS.Proxy
+	log.Debugf("Proxy is set to %t", proxy)
+
 	// Search for Entry at Cloudflare
 	records, err := cloudflareGetDNSRecord(api, zoneID, destDNS)
 	if err != nil {
@@ -303,7 +308,7 @@ func main() {
 
 	if len(records) <= 0 {
 		log.Debugf("DNSRecord not found, try to create new entry for %s", destDNS)
-		_, err = cloudflareCreateDNS(api, destDNS, externalIP, zoneID)
+		_, err = cloudflareCreateDNS(api, destDNS, externalIP, zoneID, proxy)
 		if err != nil {
 			log.Fatal(err)
 			return
